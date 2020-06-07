@@ -15,9 +15,24 @@ app.get("/devices", function (req, res) {
 
 app.get("/device/:id/dim", function (req, res) {
   const device = req.params.id;
-  const resp = HueDAO.wakeUp(device, (response) => {
+  const resp = HueDAO.dimLight(device, (response) => {
     res.json({
       message: "light dimmed",
+      data: {
+        state: {
+          on: response.state.on,
+          bri: response.state.bri,
+        },
+      },
+    });
+  });
+});
+
+app.get("/device/:id/brighten", function (req, res) {
+  const device = req.params.id;
+  const resp = HueDAO.brightenLight(device, (response) => {
+    res.json({
+      message: "light brightened",
       data: {
         state: {
           on: response.state.on,
