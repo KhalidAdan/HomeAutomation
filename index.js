@@ -1,12 +1,13 @@
-const Hue = require("./Hue/hue");
+const HueDAO = require("./Hue/hue");
 
 const express = require("express");
 const app = express();
+const port = 3000;
 
 app.get("/devices", function (req, res) {
-  Hue.fetchLights((response) => {
+  HueDAO.fetchLights((response) => {
     res.json({
-      message: "gotAllLights",
+      message: "returned all lights and full json reponse from bridge",
       data: response.data,
     });
   });
@@ -14,12 +15,17 @@ app.get("/devices", function (req, res) {
 
 app.get("/device/:id/dim", function (req, res) {
   const device = req.params.id;
-  const resp = Hue.wakeUp(device, (response) => {
+  const resp = HueDAO.wakeUp(device, (response) => {
     res.json({
       message: "light dimmed",
-      data: response,
+      data: {
+        state: {
+          on: response.state.on,
+          bri: response.state.bri,
+        },
+      },
     });
   });
 });
 
-app.listen(3000);
+app.listen(port, () => console.log(`Listening on port ${port}`));
