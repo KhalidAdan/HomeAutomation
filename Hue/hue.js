@@ -1,17 +1,17 @@
-const key = "eqechwqzuhOy9BxUjH4vdWRuOYLK3XNXEksJ7YWZ";
-const hueBridgeURL = "http://192.168.0.10";
 
 const axios = require("axios");
+require('dotenv').config();
+
 
 class Hue {
 
   async fetchLights(callback) {
-    const rsp = await axios.get(`${hueBridgeURL}/api/${key}/lights`);
+    const rsp = await axios.get(`${process.env.hueBridgeURL}/api/${key}/lights`);
     callback(rsp);
   }
 
   async fetchLight(id) {
-    const rsp = await axios.get(`${hueBridgeURL}/api/${key}/lights/${id}`);
+    const rsp = await axios.get(`${process.env.hueBridgeURL}/api/${process.env.key}/lights/${id}`);
     let light = rsp.data;
     return light;
   }
@@ -19,10 +19,10 @@ class Hue {
   async wakeUp(id, callback) {
     let data = {
       on: true,
-      bri: 1,
+      bri: 101,
     };
     const rsp = await axios.put(
-      `${hueBridgeURL}/api/${key}/lights/${id}/state`,
+      `${process.env.hueBridgeURL}/api/${process.env.key}/lights/${id}/state`,
       data
     );
     callback(await this.fetchLight(id));
