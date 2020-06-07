@@ -1,7 +1,7 @@
 const axios = require("axios");
 require("dotenv").config();
 
-const sunsetAPI = "https://api.sunrise-sunset.org/json?"
+const dayInfo = `https://api.sunrise-sunset.org/json?${process.env.location}`;
 
 const fetchLights = async (callback) => {
   const rsp = await axios.get(`${process.env.hueBridgeURL}/api/${key}/lights`);
@@ -19,8 +19,8 @@ const fetchLight = async (id) => {
 const dimLight = async (id, callback) => {
   let data = {
     on: true,
-    bri: 55,
-    transitiontime: 18000
+    bri: 1,  // dimmest possible
+    transitiontime: 30,
   };
   const rsp = await axios.put(
     `${process.env.hueBridgeURL}/api/${process.env.key}/lights/${id}/state`,
@@ -32,8 +32,8 @@ const dimLight = async (id, callback) => {
 const brightenLight = async (id, callback) => {
   let data = {
     on: true,
-    bri: 254,
-    transitiontime: 18000
+    bri: 254, // max brightness
+    transitiontime: 30,
   };
   const rsp = await axios.put(
     `${process.env.hueBridgeURL}/api/${process.env.key}/lights/${id}/state`,
